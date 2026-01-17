@@ -4,6 +4,7 @@ import ba.gmijo47.upravljanjebudetom.auth.JWTFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,6 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
     @Autowired
     JWTFilter jwtFilter;
@@ -23,6 +25,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         auth -> auth
                                 .requestMatchers("/auth/**").permitAll()
+                                .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                                 .anyRequest().authenticated())
                 .sessionManagement(session -> session.disable())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
