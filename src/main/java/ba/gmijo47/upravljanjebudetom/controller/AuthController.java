@@ -6,8 +6,8 @@ import ba.gmijo47.upravljanjebudetom.models.User;
 import ba.gmijo47.upravljanjebudetom.repos.RoleRepo;
 import ba.gmijo47.upravljanjebudetom.repos.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,11 +32,18 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
-    public User createUser(@RequestBody User user){
+    public ResponseEntity<?> createUser(@RequestBody User user){
+
+        if (userRepository.existsByEmail(user.getEmail())) {
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT).body(Map.of("message", "User already exists"));
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Role role = roleRepository.findByName("USER");
         user.getRoles().add(role);
-        return userRepository.save(user);
+        User savedUsr =  userRepository.save(user);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUsr);
     }
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestParam String email, @RequestParam String password) {
