@@ -18,10 +18,7 @@ public class UserController {
     @Autowired
     UserRepo userRepository;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
-
-    @GetMapping("/user/me")
+    @GetMapping("/me")
     public User getCurrentUser(HttpServletRequest request){
         Claims claims  = (Claims) request.getAttribute("claims");
         if (claims == null) {
@@ -30,9 +27,8 @@ public class UserController {
         String email = claims.getSubject();
         return userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
     }
-
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/user/all")
+    @GetMapping("/all")
     public Iterable<User> getAllUsers () {
         return userRepository.findAll();
     }
