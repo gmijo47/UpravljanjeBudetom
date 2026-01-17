@@ -1,18 +1,22 @@
 package ba.gmijo47.upravljanjebudetom.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+@Setter
+@Getter
 @Entity
 public class User {
 
     @Id
     @GeneratedValue
-    private int id;
-
+    private Integer id;
 
     @Column
     private String name;
@@ -27,6 +31,7 @@ public class User {
     private String password;
 
     @Column
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dob;
 
     @Column
@@ -40,77 +45,15 @@ public class User {
     )
     private Set<Role> roles = new HashSet<>();
 
-    public User(int id, String name, String lastname, String email, String password) {
+    public User(Integer id, String name, String lastname, String email, String password, Date dob) {
         this.id = id;
         this.name = name;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
+        this.dob = dob;
     }
 
     public User() {}
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public Date getDob() {
-        return dob;
-    }
-
-    public void setDob(Date dob) {
-        this.dob = dob;
-    }
-
-    public String getRefreshToken() {
-        return refreshToken;
-    }
-
-    public void setRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }
