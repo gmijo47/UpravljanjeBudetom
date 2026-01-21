@@ -14,9 +14,12 @@ import java.util.List;
 @Repository
 public interface ExpenseRepo extends JpaRepository<Expense, Long> {
     List<Expense> findByUser(User user);
+
     List<Expense> findByMonthlyBudget(MonthlyBudget monthlyBudget);
+
     @Query("SELECT e FROM Expense e JOIN e.monthlyBudget mb WHERE mb.household = :household")
     List<Expense> findByHousehold(@Param("household") Household household);
+
     @Query("SELECT e FROM Expense e JOIN e.monthlyBudget mb WHERE mb.household.id = :householdId")
     List<Expense> findByHouseholdId(@Param("householdId") Long householdId);
 }

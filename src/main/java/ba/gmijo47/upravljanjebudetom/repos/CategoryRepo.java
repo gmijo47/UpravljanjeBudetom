@@ -10,5 +10,6 @@ import java.util.List;
 @Repository
 public interface CategoryRepo extends JpaRepository<Category, Long> {
     List<Category> findByHousehold(Household household);
+
     List<Category> findByHouseholdId(Long householdId);
 }

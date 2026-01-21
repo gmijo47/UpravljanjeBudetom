@@ -11,7 +11,7 @@ import java.util.Set;
 @Setter
 @Getter
 @Entity
-@Table(name="roles")
+@Table(name = "roles")
 public class Role {
 
 
@@ -19,14 +19,14 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name="name")
+    @Column(name = "name")
     private String name;
 
     @ManyToMany(mappedBy = "roles")
     @JsonIgnore
     private Set<User> users;
 
-    public Role(String name){
+    public Role(String name) {
         this.name = name;
     }
 

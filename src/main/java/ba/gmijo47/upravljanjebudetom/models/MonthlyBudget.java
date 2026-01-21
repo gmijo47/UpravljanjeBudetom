@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,8 @@ public class MonthlyBudget {
     @JsonIgnore
     private List<Expense> expenses = new ArrayList<>();
 
-    public MonthlyBudget() {}
+    public MonthlyBudget() {
+    }
 
     public MonthlyBudget(Household household, Integer year, Integer month, BigDecimal totalIncome) {
         this.household = household;

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -41,7 +42,8 @@ public class Expense {
     @Column
     private String description;
 
-    public Expense() {}
+    public Expense() {
+    }
 
     public Expense(User user, Category category, MonthlyBudget monthlyBudget,
                    BigDecimal amount, LocalDate date) {

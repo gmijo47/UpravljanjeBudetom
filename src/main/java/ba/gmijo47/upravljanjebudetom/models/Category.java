@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +33,8 @@ public class Category {
     @JsonIgnore
     private List<Expense> expenses = new ArrayList<>();
 
-    public Category() {}
+    public Category() {
+    }
 
     public Category(Household household, String name, String type) {
         this.household = household;

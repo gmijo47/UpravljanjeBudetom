@@ -11,7 +11,10 @@ import java.util.Optional;
 @Repository
 public interface MonthlyBudgetRepo extends JpaRepository<MonthlyBudget, Long> {
     List<MonthlyBudget> findByHouseholdOrderByYearDescMonthDesc(Household household);
+
     boolean existsByHouseholdAndYearAndMonth(Household household, Integer year, Integer month);
+
     List<MonthlyBudget> findByHouseholdIdOrderByYearDescMonthDesc(Long householdId);
+
     Optional<Object> findByHouseholdAndYearAndMonth(Household household, Integer year, Integer month);
 }

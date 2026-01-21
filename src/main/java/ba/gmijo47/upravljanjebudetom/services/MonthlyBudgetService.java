@@ -94,7 +94,8 @@ public class MonthlyBudgetService {
 
         if (!isAdmin) {
             if (!isSameHousehold) throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Ovo nije vaš budžet.");
-            if (!isOwner(user)) throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Samo Owner može uređivati budžet.");
+            if (!isOwner(user))
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Samo Owner može uređivati budžet.");
         }
 
         if (payload.containsKey("totalIncome")) {

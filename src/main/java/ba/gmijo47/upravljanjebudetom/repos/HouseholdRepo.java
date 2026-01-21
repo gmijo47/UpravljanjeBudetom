@@ -13,7 +13,9 @@ import java.util.Optional;
 @Repository
 public interface HouseholdRepo extends JpaRepository<Household, Long> {
     List<Household> findByUsersContaining(User user);
+
     boolean existsByName(String name);
+
     @Query("SELECT h FROM Household h JOIN h.users u JOIN u.roles r WHERE u.id = :userId AND r.name = 'ROLE_OWNER'")
     Optional<Household> findByOwnerId(@Param("userId") Long userId);
 }

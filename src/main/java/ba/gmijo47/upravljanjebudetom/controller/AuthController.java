@@ -6,16 +6,13 @@ import ba.gmijo47.upravljanjebudetom.models.User;
 import ba.gmijo47.upravljanjebudetom.repos.RoleRepo;
 import ba.gmijo47.upravljanjebudetom.repos.UserRepo;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -51,7 +48,7 @@ public class AuthController {
             )
     )
     @PostMapping("/register")
-    public ResponseEntity<?> createUser(@RequestBody User user){
+    public ResponseEntity<?> createUser(@RequestBody User user) {
 
         if (userRepository.existsByEmail(user.getEmail())) {
             return ResponseEntity
@@ -59,11 +56,12 @@ public class AuthController {
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Role role = roleRepository.findByName("ROLE_USER");
-        if(role != null) user.getRoles().add(role);
+        if (role != null) user.getRoles().add(role);
 
-        User savedUsr =  userRepository.save(user);
+        User savedUsr = userRepository.save(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUsr);
     }
+
     @Operation(
             summary = "Prijava korisnika",
             description = "Provjerava email i lozinku te vraća JWT access i refresh token."
@@ -109,7 +107,7 @@ public class AuthController {
 
     @Operation(summary = "Refresh Token")
     @PostMapping("/refresh")
-    public ResponseEntity<?> refreshToken (
+    public ResponseEntity<?> refreshToken(
             @io.swagger.v3.oas.annotations.Parameter(description = "Refresh token UUID")
             @RequestParam String refreshToken) {
 

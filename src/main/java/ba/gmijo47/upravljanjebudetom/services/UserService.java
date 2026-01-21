@@ -13,7 +13,7 @@ import java.util.List;
 public class UserService {
 
     private final UserRepo userRepository;
-    
+
     public User getCurrentUser(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
@@ -24,12 +24,12 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
     }
 
-   
+
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    
+
     @Transactional
     public User updateUser(Long id, User userDetails, Long currentUserId) {
         User currentUser = getUserById(currentUserId);

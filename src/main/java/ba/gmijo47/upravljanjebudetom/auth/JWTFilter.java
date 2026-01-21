@@ -31,7 +31,7 @@ public class JWTFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
-            if (jwtUtil.validateToken(token)){
+            if (jwtUtil.validateToken(token)) {
                 Claims claims = Jwts.parser()
                         .verifyWith(jwtUtil.getSigningKey())
                         .build()
