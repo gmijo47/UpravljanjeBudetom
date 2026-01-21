@@ -94,7 +94,7 @@ public class AuthController {
                     .collect(Collectors.toList());
 
             String accessToken = jwtUtil.generateToken(user.getEmail(), roles);
-            String refreshToken = jwtUtil.generateRefreshToken();
+            String refreshToken = jwtUtil.generateRefreshToken(user.getId());
             user.setRefreshToken(refreshToken);
             userRepository.save(user);
 

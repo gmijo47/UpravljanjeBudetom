@@ -1,6 +1,7 @@
 package ba.gmijo47.upravljanjebudetom.auth;
 
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +21,12 @@ public class JWTUtil {
     @Value("${jwt.expiration}")
     private Long expiration;
 
+    @Value("${jwt.refresh-token.secret}")
+    private String refreshSecret;
+
+    @Value("${jwt.refresh-token.expiration}")
+    private long refreshExpiration;
+
     public SecretKey getSigningKey() {
         return new SecretKeySpec(
                 secret.getBytes(),
@@ -27,8 +34,14 @@ public class JWTUtil {
         );
     }
 
-    public String generateRefreshToken() {
-        return UUID.randomUUID().toString();
+    public String generateRefreshToken(Integer userId) {
+        return Jwts.builder()
+                .subject(userId.toString())
+                .claim("type", "refresh")
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + refreshExpiration))
+                .signWith(new SecretKeySpec(refreshSecret.getBytes(), "HmacSHA256"))
+                .compact();
     }
 
     public String generateToken(String username, List<String> roles) {
