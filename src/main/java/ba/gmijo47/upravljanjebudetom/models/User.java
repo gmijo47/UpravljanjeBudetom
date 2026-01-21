@@ -56,11 +56,6 @@ public class User {
     @OneToMany
     @JoinColumn(name = "user_id")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private List<BudgetAllocation> budgetAllocations = new ArrayList<>();
-
-    @OneToMany
-    @JoinColumn(name = "user_id")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Expense> expenses = new ArrayList<>();
 
     public User(Integer id, String name, String lastname, String email, String password, Date dob) {
