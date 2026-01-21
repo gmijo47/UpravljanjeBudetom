@@ -28,6 +28,7 @@ public class SecurityConfig {
                                 .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN", "OWNER")
                                 .requestMatchers("/household/**").hasAnyRole("USER", "ADMIN", "OWNER")
                                 .requestMatchers("/category/**").hasAnyRole("USER", "ADMIN", "OWNER")
+                                .requestMatchers("/budget/**").hasAnyRole("USER", "ADMIN", "OWNER")
                                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                                 .anyRequest().authenticated())
                 .sessionManagement(session -> session.disable())
