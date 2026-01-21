@@ -1,6 +1,7 @@
 package ba.gmijo47.upravljanjebudetom.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,6 +29,7 @@ public class User {
     private String email;
 
     @Column
+    @JsonIgnore
     private String password;
 
     @Column
@@ -35,6 +37,7 @@ public class User {
     private Date dob;
 
     @Column
+    @JsonIgnore
     private String refreshToken;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -43,6 +46,7 @@ public class User {
             joinColumns = @JoinColumn(name="user_id"),
             inverseJoinColumns = @JoinColumn(name="role_id")
     )
+    @JsonIgnore
     private Set<Role> roles = new HashSet<>();
 
     public User(Integer id, String name, String lastname, String email, String password, Date dob) {
