@@ -1,7 +1,6 @@
 package ba.gmijo47.upravljanjebudetom.auth;
 
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -9,7 +8,6 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @Component
 public class JWTUtil {

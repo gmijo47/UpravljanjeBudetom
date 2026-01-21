@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -20,15 +21,19 @@ public class SecurityConfig {
     JWTFilter jwtFilter;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
+        http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         auth -> auth
                                 .requestMatchers("/auth/**").permitAll()
-                                .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+                                .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN", "OWNER")
+                                .requestMatchers("/household/**").hasAnyRole("USER", "ADMIN", "OWNER")
+                                .requestMatchers("/category/**").hasAnyRole("USER", "ADMIN", "OWNER")
+                                .requestMatchers("/budget/**").hasAnyRole("USER", "ADMIN", "OWNER")
+                                .requestMatchers("/expense/**").hasAnyRole("USER", "ADMIN", "OWNER")
                                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                                 .anyRequest().authenticated())
-                .sessionManagement(session -> session.disable())
+                .sessionManagement(AbstractHttpConfigurer::disable)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

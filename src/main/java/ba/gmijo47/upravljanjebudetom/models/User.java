@@ -1,14 +1,12 @@
 package ba.gmijo47.upravljanjebudetom.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Setter
 @Getter
@@ -29,7 +27,7 @@ public class User {
     private String email;
 
     @Column
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Column
@@ -37,7 +35,7 @@ public class User {
     private Date dob;
 
     @Column
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String refreshToken;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -46,8 +44,18 @@ public class User {
             joinColumns = @JoinColumn(name="user_id"),
             inverseJoinColumns = @JoinColumn(name="role_id")
     )
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Set<Role> roles = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "household_id")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Household household;
+
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private List<Expense> expenses = new ArrayList<>();
 
     public User(Integer id, String name, String lastname, String email, String password, Date dob) {
         this.id = id;
