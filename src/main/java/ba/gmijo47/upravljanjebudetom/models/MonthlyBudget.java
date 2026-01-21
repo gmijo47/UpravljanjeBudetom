@@ -37,11 +37,6 @@ public class MonthlyBudget {
     @OneToMany
     @JoinColumn(name = "monthly_budget_id")
     @JsonIgnore
-    private List<BudgetAllocation> budgetAllocations = new ArrayList<>();
-
-    @OneToMany
-    @JoinColumn(name = "monthly_budget_id")
-    @JsonIgnore
     private List<Expense> expenses = new ArrayList<>();
 
     public MonthlyBudget() {}
