@@ -26,7 +26,6 @@ public class Household {
 
     @OneToMany
     @JoinColumn(name = "household_id")
-    @JsonIgnore
     private List<User> users = new ArrayList<>();
 
     @OneToMany
