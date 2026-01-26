@@ -51,7 +51,7 @@ public class HouseholdController {
             @RequestBody Household household,
             HttpServletRequest request) {
         Long userId = getUserId(request);
-        return ResponseEntity.ok(householdService.createHousehold(household, userId));
+        throw new ResponseStatusException(HttpStatus.OK, "Household has been successfully created.");
     }
 
     @Operation(summary = "Get my household", description = "Vraća kućanstvo kojem pripada trenutno ulogirani korisnik.")
@@ -98,7 +98,8 @@ public class HouseholdController {
             HttpServletRequest request) {
 
         Long userId = getUserId(request);
-        return ResponseEntity.ok(householdService.updateHousehold(id, details, userId));
+        throw new ResponseStatusException(HttpStatus.OK, "Household has been successfully updated.");
+
     }
 
     @Operation(summary = "Add member", description = "Dodaje postojećeg korisnika u kućanstvo. Korisnik ne smije već biti u nekom kućanstvu.")
@@ -136,7 +137,7 @@ public class HouseholdController {
             HttpServletRequest request) {
         Long currentUserId = getUserId(request);
         householdService.removeMember(householdId, userId, currentUserId);
-        return ResponseEntity.ok().build();
+        throw new ResponseStatusException(HttpStatus.OK, "User has been kicked successfully.");
     }
 
     @Operation(summary = "Leave household", description = "Korisnik samostalno napušta kućanstvo. Vlasnik ne može napustiti (mora obrisati ili prenijeti vlasništvo).")
@@ -148,7 +149,7 @@ public class HouseholdController {
     public ResponseEntity<Void> leave(@PathVariable Long householdId, HttpServletRequest request) {
         Long currentUserId = getUserId(request);
         householdService.leaveHousehold(householdId, currentUserId);
-        return ResponseEntity.ok().build();
+        throw new ResponseStatusException(HttpStatus.OK, "You have household successfully.");
     }
 
     private Long getUserId(HttpServletRequest request) {
