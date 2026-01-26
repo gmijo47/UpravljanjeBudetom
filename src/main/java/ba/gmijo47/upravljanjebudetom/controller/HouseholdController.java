@@ -98,7 +98,8 @@ public class HouseholdController {
             HttpServletRequest request) {
 
         Long userId = getUserId(request);
-        throw new ResponseStatusException(HttpStatus.OK, "Household has been successfully updated.");
+
+        return ResponseEntity.ok(householdService.updateHousehold(id, details, userId));
 
     }
 
