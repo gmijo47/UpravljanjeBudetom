@@ -14,11 +14,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Map;
@@ -54,8 +52,7 @@ public class CategoryController {
             @RequestBody Map<String, String> payload,
             HttpServletRequest request) {
         Long userId = getUserId(request);
-        throw new ResponseStatusException(HttpStatus.OK, "Category has been successfully created.");
-
+        return ResponseEntity.ok(categoryService.createMyCategory(payload, userId));
     }
 
     @Operation(summary = "Update category", description = "Ažurira kategoriju. Članovi/Owner mogu samo svoje, Admin može bilo koju.")
@@ -68,7 +65,7 @@ public class CategoryController {
             @RequestBody Map<String, String> payload,
             HttpServletRequest request) {
         Long userId = getUserId(request);
-        throw new ResponseStatusException(HttpStatus.OK, "Category has been successfully updated.");
+        return ResponseEntity.ok(categoryService.updateCategory(id, payload, userId));
     }
 
     @Operation(summary = "Delete category", description = "Briše kategoriju. Članovi/Owner mogu samo svoje, Admin može bilo koju.")
@@ -76,7 +73,7 @@ public class CategoryController {
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id, HttpServletRequest request) {
         Long userId = getUserId(request);
         categoryService.deleteCategory(id, userId);
-        throw new ResponseStatusException(HttpStatus.OK, "Category has been successfully deleted.");
+        return ResponseEntity.ok().build();
     }
 
 

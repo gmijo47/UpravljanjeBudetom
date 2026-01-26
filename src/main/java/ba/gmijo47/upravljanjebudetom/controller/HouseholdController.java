@@ -51,7 +51,7 @@ public class HouseholdController {
             @RequestBody Household household,
             HttpServletRequest request) {
         Long userId = getUserId(request);
-        throw new ResponseStatusException(HttpStatus.OK, "Household has been successfully created.");
+        return ResponseEntity.ok(householdService.createHousehold(household, userId));
     }
 
     @Operation(summary = "Get my household", description = "Vraća kućanstvo kojem pripada trenutno ulogirani korisnik.")
@@ -98,7 +98,8 @@ public class HouseholdController {
             HttpServletRequest request) {
 
         Long userId = getUserId(request);
-        throw new ResponseStatusException(HttpStatus.OK, "Household has been successfully updated.");
+
+        return ResponseEntity.ok(householdService.updateHousehold(id, details, userId));
 
     }
 

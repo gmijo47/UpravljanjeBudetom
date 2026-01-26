@@ -14,11 +14,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Map;
@@ -55,8 +53,7 @@ public class MonthlyBudgetController {
             @RequestBody Map<String, Object> payload,
             HttpServletRequest request) {
         Long userId = getUserId(request);
-        throw new ResponseStatusException(HttpStatus.OK, "Budget has been successfully created.");
-
+        return ResponseEntity.ok(budgetService.createBudget(payload, userId));
     }
 
     @Operation(summary = "Update budget (Owner only)", description = "Ažurira iznos prihoda. Samo Owner.")
@@ -70,8 +67,7 @@ public class MonthlyBudgetController {
             @RequestBody Map<String, Object> payload,
             HttpServletRequest request) {
         Long userId = getUserId(request);
-        throw new ResponseStatusException(HttpStatus.OK, "Budget has been successfully updated.");
-
+        return ResponseEntity.ok(budgetService.updateBudget(id, payload, userId));
     }
 
 

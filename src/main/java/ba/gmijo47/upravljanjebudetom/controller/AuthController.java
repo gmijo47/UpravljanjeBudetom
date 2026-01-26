@@ -38,6 +38,7 @@ public class AuthController {
             User savedUser = authService.registerUser(user);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
         } catch (RuntimeException e) {
+            // Ovdje hvatamo "User already exists" iz servisa
             return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message", e.getMessage()));
         }
     }

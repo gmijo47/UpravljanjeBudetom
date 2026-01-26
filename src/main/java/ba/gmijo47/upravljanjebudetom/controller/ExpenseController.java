@@ -11,11 +11,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Map;
@@ -46,7 +44,7 @@ public class ExpenseController {
             @RequestBody Map<String, Object> payload,
             HttpServletRequest request) {
         Long userId = getUserId(request);
-        throw new ResponseStatusException(HttpStatus.OK, "Expense has been successfully created.");
+        return ResponseEntity.ok(expenseService.createExpense(payload, userId));
     }
 
     @Operation(summary = "Delete expense", description = "User briše svoje, Owner bilo čije, Admin sve.")
@@ -54,7 +52,7 @@ public class ExpenseController {
     public ResponseEntity<Void> deleteExpense(@PathVariable Long id, HttpServletRequest request) {
         Long userId = getUserId(request);
         expenseService.deleteExpense(id, userId);
-        throw new ResponseStatusException(HttpStatus.OK, "Expense has been deleted successfully.");
+        return ResponseEntity.ok().build();
     }
 
 
