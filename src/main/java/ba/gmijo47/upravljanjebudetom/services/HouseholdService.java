@@ -84,10 +84,7 @@ public class HouseholdService {
         Household household = getHouseholdById(id);
         User currentUser = userService.getUserById(currentUserId);
 
-
-        if (isAdmin(currentUser) && !isUserOwner(currentUserId, id)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot update someone else's household");
-        }
+        validateAccess(household, currentUser);
 
         if (details.getName() != null && !details.getName().isEmpty()) {
             household.setName(details.getName());
@@ -101,11 +98,7 @@ public class HouseholdService {
         Household household = getHouseholdById(householdId);
         User currentUser = userService.getUserById(currentUserId);
 
-        boolean isMember = currentUser.getHousehold() != null && currentUser.getHousehold().getId().equals(householdId);
-
-        if (!isMember && isAdmin(currentUser)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You must be a member or admin to add users");
-        }
+        validateAccess(household, currentUser);
 
         User newMember = userService.getUserById(newMemberId);
         if (newMember.getHousehold() != null) {
@@ -118,11 +111,10 @@ public class HouseholdService {
 
     @Transactional
     public void removeMember(Long householdId, Long memberIdToRemove, Long currentUserId) {
+        Household household = getHouseholdById(householdId);
         User currentUser = userService.getUserById(currentUserId);
 
-        if (isAdmin(currentUser) && !isUserOwner(currentUserId, householdId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only the owner of this household can kick members");
-        }
+        validateAccess(household, currentUser);
 
         if (memberIdToRemove.equals(currentUserId)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Owner cannot kick themselves");
@@ -161,6 +153,23 @@ public class HouseholdService {
                 .orElse(false);
     }
 
+    private void validateAccess(Household targetHousehold, User currentUser) {
+        if (isAdmin(currentUser)) {
+            return;
+        }
+
+        boolean isOwnerRole = currentUser.getRoles().stream()
+                .anyMatch(r -> r.getName().equals("ROLE_OWNER"));
+
+        if (!isOwnerRole) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to manage households.");
+        }
+
+        Household ownersHousehold = currentUser.getHousehold();
+        if (ownersHousehold == null || !ownersHousehold.getId().equals(targetHousehold.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You can only manage your own household.");
+        }
+    }
     private boolean isAdmin(User user) {
         return user.getRoles().stream().anyMatch(r -> r.getName().equals("ROLE_ADMIN"));
     }
