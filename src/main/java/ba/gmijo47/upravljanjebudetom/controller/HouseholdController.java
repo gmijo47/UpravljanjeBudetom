@@ -51,7 +51,7 @@ public class HouseholdController {
             @RequestBody Household household,
             HttpServletRequest request) {
         Long userId = getUserId(request);
-        return ResponseEntity.ok(householdService.createHousehold(household, userId));
+        throw new ResponseStatusException(HttpStatus.OK, "Household has been successfully created.");
     }
 
     @Operation(summary = "Get my household", description = "Vraća kućanstvo kojem pripada trenutno ulogirani korisnik.")
