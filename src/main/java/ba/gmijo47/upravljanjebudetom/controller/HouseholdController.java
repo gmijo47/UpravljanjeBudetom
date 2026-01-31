@@ -15,11 +15,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -51,7 +49,7 @@ public class HouseholdController {
             @RequestBody Household household,
             HttpServletRequest request) {
         Long userId = getUserId(request);
-        throw new ResponseStatusException(HttpStatus.OK, "Household has been successfully created.");
+        return ResponseEntity.ok(householdService.createHousehold(household, userId));
     }
 
     @Operation(summary = "Get my household", description = "Vraća kućanstvo kojem pripada trenutno ulogirani korisnik.")
@@ -98,9 +96,7 @@ public class HouseholdController {
             HttpServletRequest request) {
 
         Long userId = getUserId(request);
-
         return ResponseEntity.ok(householdService.updateHousehold(id, details, userId));
-
     }
 
     @Operation(summary = "Add member", description = "Dodaje postojećeg korisnika u kućanstvo. Korisnik ne smije već biti u nekom kućanstvu.")
@@ -109,19 +105,14 @@ public class HouseholdController {
             @ApiResponse(responseCode = "400", description = "User already in a household"),
             @ApiResponse(responseCode = "403", description = "Forbidden - Only members/admin can add others")
     })
-    @PreAuthorize("hasAnyRole('ADMIN', 'OWNER')")
-    @PostMapping(value = {
-            "/{householdId}/add/{userId}"
-    })
+    @PostMapping("/{householdId}/members/{userId}")
     public ResponseEntity<Void> addMember(
-            @PathVariable(required = false) Long householdId,
+            @PathVariable Long householdId,
             @Parameter(description = "ID korisnika kojeg dodajemo") @PathVariable Long userId,
             HttpServletRequest request) {
-
         Long currentUserId = getUserId(request);
         householdService.addMember(householdId, userId, currentUserId);
-
-        throw new ResponseStatusException(HttpStatus.OK, "User has been successfully added to household.");
+        return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "Kick member (Owner/Admin only)", description = "Izbacuje korisnika iz kućanstva. Ovu akciju mogu izvesti samo VLASNIK (Owner) ili ADMIN.")
@@ -138,7 +129,7 @@ public class HouseholdController {
             HttpServletRequest request) {
         Long currentUserId = getUserId(request);
         householdService.removeMember(householdId, userId, currentUserId);
-        throw new ResponseStatusException(HttpStatus.OK, "User has been kicked successfully.");
+        return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "Leave household", description = "Korisnik samostalno napušta kućanstvo. Vlasnik ne može napustiti (mora obrisati ili prenijeti vlasništvo).")
@@ -150,7 +141,7 @@ public class HouseholdController {
     public ResponseEntity<Void> leave(@PathVariable Long householdId, HttpServletRequest request) {
         Long currentUserId = getUserId(request);
         householdService.leaveHousehold(householdId, currentUserId);
-        throw new ResponseStatusException(HttpStatus.OK, "You have household successfully.");
+        return ResponseEntity.ok().build();
     }
 
     private Long getUserId(HttpServletRequest request) {
