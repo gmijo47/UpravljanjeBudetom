@@ -10,7 +10,7 @@ services:
     ports:
       - "${DB_HOST_PORT}:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - mysql_data_2:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD}"]
       interval: 5s
@@ -20,7 +20,7 @@ services:
     build: .
     container_name: budzet_app
     ports:
-      - "9090:8080"
+      - "9090:9090"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/${DB_NAME}?allowPublicKeyRetrieval=true&useSSL=false
       SPRING_DATASOURCE_USERNAME: root
@@ -32,4 +32,4 @@ services:
     restart: on-failure
 
 volumes:
-  mysql_data:
+  mysql_data_2:
